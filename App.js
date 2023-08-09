@@ -1,38 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { useCallback, useEffect, useState } from "react";
-import RoomScreen from "./screens/Room";
-import HomeScreen from "./screens/Home";
-import { AUDIO_RECORDING, CAMERA } from "expo-permissions";
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import RoomScreen from './screens/Room';
+import HomeScreen from './screens/Home';
+import { Audio, Video } from 'expo-av';
 
-export default function App() {
+const App = () => {
   const [joinRoom, setJoinRoom] = useState(false);
-  // const navigate = useCallback(
-  //   (screen) => setJoinRoom(screen === "RoomScreen"),
-  //   []
-  // );
 
-  useEffect(() => {
-    const checkPermissions = async () => {
-      const { status: cameraStatus } = await Permissions.askAsync(
-        CAMERA
-      );
-      const { status: audioStatus } = await Permissions.askAsync(
-        AUDIO_RECORDING
-      );
-
-      if (cameraStatus === "granted" && audioStatus === "granted") {
-        setJoinRoom(true);
-      } else {
-        console.log("Permission Not Granted!");
-      }
-    };
-
-    checkPermissions();
-  }, []);
-
-  const handleJoinPress = () => {
-    setJoinRoom(true);
+  const onJoinRoomPress = async () => {
+    try {
+      await Audio.requestPermissionsAsync();
+      await Video.requestPermissionsAsync();
+      setJoinRoom(true);
+    } catch (error) {
+      console.log('Permission not granted!');
+    }
   };
 
   const handleRoomEnd = () => {
@@ -40,17 +23,17 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#EFF7FF" }}>
-      <StatusBar barStyle={"dark-content"} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#EFF7FF' }}>
+      <StatusBar barStyle={'dark-content'} />
 
       {joinRoom ? (
         <RoomScreen handleRoomEnd={handleRoomEnd} />
       ) : (
-        <HomeScreen handleJoinPress={handleJoinPress} />
+        <HomeScreen handleJoinPress={onJoinRoomPress} />
       )}
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -60,3 +43,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
