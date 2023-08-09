@@ -22,6 +22,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "RECORD_AUDIO",
+        "CAMERA"
+      ],
       "package": "com.mariomobile.hundredms"
     },
     "web": {
