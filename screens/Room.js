@@ -4,8 +4,11 @@ import {
   View,
   TouchableHighlight,
   ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { usePeerTrackNodes } from "../hooks/usePeerTrackNodes";
+import { useState } from "react";
 
 const RoomScreen = ({ handleRoomEnd }) => {
   const {
@@ -16,7 +19,20 @@ const RoomScreen = ({ handleRoomEnd }) => {
     onHandleAudioMute,
     onHandleVideoMute,
     micMuted,
+    chatMessages,
+    sendBroadcastMessage,
+    setChatMessages,
+    username,
   } = usePeerTrackNodes({ handleRoomEnd });
+
+  const [inputMessage, setInputMessage] = useState("");
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim() !== "") {
+      sendBroadcastMessage(inputMessage);
+      setInputMessage("");
+    }
+  };
 
   // console.log(onHandleAudioMute());
 
@@ -99,6 +115,37 @@ const RoomScreen = ({ handleRoomEnd }) => {
 
   return (
     <View style={{ flex: 1 }}>
+      {/* Chat Input */}
+      <View style={{ flexDirection: "row", alignItems: "center", padding: 10 }}>
+        <TextInput
+          style={{ flex: 1, marginRight: 10, borderWidth: 1, padding: 5 }}
+          placeholder="Type your message..."
+          value={inputMessage}
+          onChangeText={(text) => setInputMessage(text)}
+        />
+        <TouchableOpacity
+          onPress={handleSendMessage}
+          style={{ backgroundColor: "#2471ED", padding: 10, borderRadius: 5 }}
+        >
+          <Text style={{ color: "white" }}>Send</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Chat Messages */}
+      <FlatList
+        data={chatMessages}
+        keyExtractor={(item) => item.messageId}
+        renderItem={({ item }) => (
+          <Text
+            style={{ color: item.sender?._name === username ? "red" : "black" }}
+          >
+            {item.sender?._name === username && `${username}: ${item.message}`}
+            {item.sender?.name &&
+              `${item.sender?.name || "Anonymous"}: ${item.message}`}
+          </Text>
+        )}
+      />
+
       {loading ? (
         // Showing loader while Join is under process
         <View

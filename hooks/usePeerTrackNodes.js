@@ -26,7 +26,45 @@ export const usePeerTrackNodes = ({ handleRoomEnd }) => {
   const [loading, setLoading] = useState(true);
   const [peerTrackNodes, setPeerTrackNodes] = useState([]); // Use this state to render Peer Tiles
   const [micMuted, setMicMuted] = useState(null); // Setting the audio state
-  // console.log(micMuted);
+  const [chatMessages, setChatMessages] = useState([]);
+
+  // receive messages
+  const onMessageReceived = (message) => {
+    setChatMessages((prevMessages) => [message, ...prevMessages]);
+  };
+  console.log("Received Message", chatMessages);
+
+  // send bc messages
+  const sendBroadcastMessage = async (message) => {
+    try {
+      const hmsInstance = hmsInstanceRef.current;
+
+      const localPeer = await hmsInstance.getLocalPeer();
+
+      const result = await hmsInstance.sendBroadcastMessage(message);
+
+      const sentMessage = {
+        message: result.message,
+        messageId: result.messageId,
+        recipient: {
+          recipientPeer: undefined,
+          recipientRoles: [], // Depending on your use case, you might need to adjust this
+          recipientType: "BROADCAST",
+        },
+        sender: {
+          _name: localPeer.name,
+          peerID: localPeer.peerID,
+        },
+        time: new Date(),
+        type: "chat",
+      };
+
+      setChatMessages((prevChatMessages) => [sentMessage, ...prevChatMessages]);
+      console.log("Broadcast Message Success: ", result, sentMessage);
+    } catch (error) {
+      console.log("Broadcast Message Error: ", error);
+    }
+  };
 
   /**
    * Handles Room leave process
@@ -281,6 +319,10 @@ export const usePeerTrackNodes = ({ handleRoomEnd }) => {
           HMSUpdateListenerActions.ON_ERROR,
           onErrorListener
         );
+        hmsInstance.addEventListener(
+          HMSUpdateListenerActions.ON_MESSAGE,
+          onMessageReceived
+        );
 
         hmsInstance.join(
           new HMSConfig({ authToken: token, username: USERNAME })
@@ -308,5 +350,9 @@ export const usePeerTrackNodes = ({ handleRoomEnd }) => {
     onHandleAudioMute: handleMuteAndUnmuteAudio,
     onHandleVideoMute: handleMuteAndUnmuteVideo,
     micMuted,
+    chatMessages,
+    sendBroadcastMessage,
+    setChatMessages,
+    username: USERNAME,
   };
 };
