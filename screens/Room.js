@@ -90,6 +90,8 @@ const RoomScreen = ({ handleRoomEnd }) => {
                   .join("")}
               </Text>
             </View>
+
+            
             <Text
               style={{
                 textAlign: "center",

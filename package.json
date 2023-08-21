@@ -12,11 +12,25 @@
     "@100mslive/react-native-hms": "^1.7.0",
     "expo": "~49.0.5",
     "expo-av": "~13.4.1",
+    "expo-background-fetch": "~11.3.0",
     "expo-dev-client": "~2.4.6",
+    "expo-device": "~5.4.0",
+    "expo-font": "~11.4.0",
+    "expo-image-picker": "~14.3.2",
+    "expo-linear-gradient": "~12.3.0",
+    "expo-linking": "~5.0.2",
     "expo-media-library": "^15.4.1",
+    "expo-notifications": "~0.20.1",
+    "expo-sqlite": "~11.3.2",
     "expo-status-bar": "~1.6.0",
+    "expo-task-manager": "~11.3.0",
+    "formik": "^2.4.3",
+    "native-base": "^3.4.28",
     "react": "18.2.0",
-    "react-native": "0.72.3"
+    "react-native": "0.72.3",
+    "react-native-gesture-handler": "^2.12.1",
+    "react-native-mmkv": "^2.10.1",
+    "react-native-otp-inputs": "^7.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
