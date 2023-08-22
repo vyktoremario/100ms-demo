@@ -22,6 +22,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "RECORD_AUDIO",
+        "CAMERA"
+      ],
       "package": "com.mariomobile.hundredms"
     },
     "web": {
@@ -29,8 +33,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "cb03ea71-e955-4e2e-9587-8ed7392f46f1"
+        "projectId": "22a474f4-c92e-4559-9887-1f41732a019f"
       }
-    }
+    },
+    "owner": "okeoluwayomi"
   }
 }

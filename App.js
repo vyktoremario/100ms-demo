@@ -11,10 +11,10 @@ const App = () => {
   const onJoinRoomPress = async () => {
     try {
       await Audio.requestPermissionsAsync();
-      await Video.requestPermissionsAsync();
+      // await Video.requestPermissionsAsync();
       setJoinRoom(true);
     } catch (error) {
-      console.log('Permission not granted!');
+      console.log('Permission not granted!', error);
     }
   };
 
